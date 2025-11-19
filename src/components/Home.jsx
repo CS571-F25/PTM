@@ -21,33 +21,20 @@ export default function Home() {
     return (
         <div className="app-container">
             {/* Hamburger Menu Button */}
-            <Button 
-                variant="light" 
-                className="hamburger-btn"
-                onClick={handleShowMenu}
-            >
+            <Button variant="light" className="hamburger-btn" onClick={handleShowMenu}>
                 <span className="hamburger-icon">☰</span>
             </Button>
 
             {/* Offcanvas Sidebar Menu */}
             <Offcanvas show={showMenu} onHide={handleCloseMenu} className="sidebar-menu">
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Menu</Offcanvas.Title>
+                <Offcanvas.Title>Menu</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Nav className="flex-column">
-                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>
-                            🏠 Home
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>
-                            👤 About Me
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/statistics" onClick={handleCloseMenu}>
-                            📊 Statistics
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>
-                            ⚙️ Settings
-                        </Nav.Link>
+                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}> 🏠 Home </Nav.Link>
+                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}> 👤 About Me </Nav.Link>
+                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}> ⚙️ Settings </Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
             </Offcanvas>
@@ -73,10 +60,7 @@ export default function Home() {
                                         className="custom-range"
                                     />
                                 </div>
-                                <Button 
-                                    className={`timer-btn ${isTimerActive ? 'active' : ''}`}
-                                    onClick={() => setIsTimerActive(!isTimerActive)}
-                                >
+                                <Button className={`timer-btn ${isTimerActive ? 'active' : ''}`} onClick={() => setIsTimerActive(!isTimerActive)}>
                                     {isTimerActive ? "⏸ Stop Timer" : "▶ Start Timer"}
                                 </Button>
                             </Card.Body>

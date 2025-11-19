@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, Offcanvas, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
 import './Home.css';
 
-export default function AboutMe (props) {
+export default function Settings (props) {
     const [showMenu, setShowMenu] = useState(false);
 
     const handleShowMenu = () => setShowMenu(true);
