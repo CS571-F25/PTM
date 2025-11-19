@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Button, Offcanvas, Nav } from 'react-bootstrap';
+import { Row, Col, Card, Button, Offcanvas, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
 import './Home.css';
 
@@ -20,6 +20,7 @@ export default function Home() {
 
     return (
         <div className="app-container">
+            {/* Hamburger Menu Button */}
             <Button 
                 variant="light" 
                 className="hamburger-btn"
@@ -28,6 +29,7 @@ export default function Home() {
                 <span className="hamburger-icon">☰</span>
             </Button>
 
+            {/* Offcanvas Sidebar Menu */}
             <Offcanvas show={showMenu} onHide={handleCloseMenu} className="sidebar-menu">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Menu</Offcanvas.Title>
@@ -40,14 +42,23 @@ export default function Home() {
                         <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>
                             👤 About Me
                         </Nav.Link>
+                        <Nav.Link as={Link} to="/statistics" onClick={handleCloseMenu}>
+                            📊 Statistics
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>
+                            ⚙️ Settings
+                        </Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
             </Offcanvas>
 
-            <Container fluid className="py-4 main-content">
+            <div className="main-content">
                 <h1 className="text-center mb-4 app-title">Pomodoro Task Manager</h1>
-                <Row className="mb-4">
-                    <Col md={12}>
+                
+                {/* Split Section: Timer and Add Task */}
+                <Row className="mb-4 gx-3">
+                    {/* Pomodoro Timer Section */}
+                    <Col md={6}>
                         <Card className="timer-card">
                             <Card.Body>
                                 <h4 className="timer-title">🍅 Pomodoro Timer</h4>
@@ -71,9 +82,59 @@ export default function Home() {
                             </Card.Body>
                         </Card>
                     </Col>
+
+                    {/* Add Task Section */}
+                    <Col md={6}>
+                        <Card className="add-task-card">
+                            <Card.Body>
+                                <h4 className="add-task-title">➕ Add New Task</h4>
+                                <form onSubmit={(e) => e.preventDefault()}>
+                                    <div className="mb-3">
+                                        <input 
+                                            type="text" 
+                                            className="form-control task-input"
+                                            placeholder="Task title..."
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <Row>
+                                            <Col xs={6}>
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control task-input"
+                                                    placeholder="Class/Category"
+                                                />
+                                            </Col>
+                                            <Col xs={6}>
+                                                <select className="form-select task-input">
+                                                    <option>Priority</option>
+                                                    <option>High</option>
+                                                    <option>Medium</option>
+                                                    <option>Low</option>
+                                                </select>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    <div className="mb-3">
+                                        <input 
+                                            type="number" 
+                                            className="form-control task-input"
+                                            placeholder="Number of Pomodoro cycles"
+                                            min="1"
+                                        />
+                                    </div>
+                                    <Button className="add-task-btn w-100">
+                                        Add to Backlog
+                                    </Button>
+                                </form>
+                            </Card.Body>
+                        </Card>
+                    </Col>
                 </Row>
 
+                {/* Task Columns */}
                 <Row className="task-columns">
+                    {/* Backlog Column */}
                     <Col lg={4} md={6} className="mb-4">
                         <Card className="task-column backlog-column">
                             <Card.Header>
@@ -102,6 +163,7 @@ export default function Home() {
                         </Card>
                     </Col>
 
+                    {/* Today's Tasks Column */}
                     <Col lg={4} md={6} className="mb-4">
                         <Card className="task-column today-column">
                             <Card.Header>
@@ -135,7 +197,8 @@ export default function Home() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    
+
+                    {/* Future Tasks Column */}
                     <Col lg={4} md={6} className="mb-4">
                         <Card className="task-column future-column">
                             <Card.Header>
@@ -170,7 +233,7 @@ export default function Home() {
                         </Card>
                     </Col>
                 </Row>
-            </Container>
+            </div>
         </div>
     );
 }
