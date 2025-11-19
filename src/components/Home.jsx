@@ -1,146 +1,176 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Offcanvas, Nav } from 'react-bootstrap';
+import { Link } from 'react-router';
+import './Home.css';
 
 export default function Home() {
     const [backlogTasks, setBacklogTasks] = useState([
         { id: 1, title: 'Complete CS 571 Homework', class: 'CS 571', priority: 'High', pomodoroCount: 3 },
-        { id: 2, title: 'Read Chapter 5', class: 'History', priority: 'Medium', pomodoroCount: 2 },
-        { id: 3, title: 'Math Problem Set', class: 'Math', priority: 'High', pomodoroCount: 4 }
+        { id: 2, title: 'Read Chapter 5', class: 'History', priority: 'Medium', pomodoroCount: 2 }
     ]);
     
     const [todayTasks, setTodayTasks] = useState([]);
     const [futureTasks, setFutureTasks] = useState([]);
     const [breakDuration, setBreakDuration] = useState(5);
     const [isTimerActive, setIsTimerActive] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+
+    const handleCloseMenu = () => setShowMenu(false);
+    const handleShowMenu = () => setShowMenu(true);
 
     return (
-        <Container fluid className="py-4">
-            <h1 className="text-center mb-4">Pomodoro Task Manager</h1>
-            
-            {/* Timer Controls Section */}
-            <Row className="mb-4">
-                <Col md={12}>
-                    <Card className="bg-light">
-                        <Card.Body>
-                            <h4>Pomodoro Timer</h4>
-                            <div className="d-flex align-items-center gap-3 mb-3">
-                                <span>Break Duration: {breakDuration} mins</span>
-                                <input 
-                                    type="range" 
-                                    min="5" 
-                                    max="10" 
-                                    value={breakDuration}
-                                    onChange={(e) => setBreakDuration(e.target.value)}
-                                    className="form-range"
-                                    style={{ width: '200px' }}
-                                />
-                            </div>
-                            <Button 
-                                variant={isTimerActive ? "danger" : "success"}
-                                onClick={() => setIsTimerActive(!isTimerActive)}
-                            >
-                                {isTimerActive ? "Stop Timer" : "Start Timer"}
-                            </Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+        <div className="app-container">
+            <Button 
+                variant="light" 
+                className="hamburger-btn"
+                onClick={handleShowMenu}
+            >
+                <span className="hamburger-icon">☰</span>
+            </Button>
 
-            {/* Task Columns */}
-            <Row>
-                {/* Backlog Column */}
-                <Col md={4}>
-                    <Card className="h-100">
-                        <Card.Header className="bg-primary text-white">
-                            <h5 className="mb-0">Backlog</h5>
-                            <small>All Tasks</small>
-                        </Card.Header>
-                        <Card.Body style={{ minHeight: '400px', overflowY: 'auto' }}>
-                            {backlogTasks.map(task => (
-                                <Card key={task.id} className="mb-3 shadow-sm">
-                                    <Card.Body>
-                                        <Card.Title>{task.title}</Card.Title>
-                                        <div className="mb-2">
-                                            <span className="badge bg-secondary me-2">{task.class}</span>
-                                            <span className={`badge ${task.priority === 'High' ? 'bg-danger' : 'bg-warning'}`}>
-                                                {task.priority}
-                                            </span>
-                                        </div>
-                                        <p className="mb-2">🍅 {task.pomodoroCount} cycles (25 mins each)</p>
-                                        <Button size="sm" variant="outline-primary">
-                                            Move to Today →
-                                        </Button>
-                                    </Card.Body>
-                                </Card>
-                            ))}
-                        </Card.Body>
-                    </Card>
-                </Col>
+            <Offcanvas show={showMenu} onHide={handleCloseMenu} className="sidebar-menu">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Menu</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <Nav className="flex-column">
+                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>
+                            🏠 Home
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>
+                            👤 About Me
+                        </Nav.Link>
+                    </Nav>
+                </Offcanvas.Body>
+            </Offcanvas>
 
-                {/* Today's Tasks Column */}
-                <Col md={4}>
-                    <Card className="h-100">
-                        <Card.Header className="bg-success text-white">
-                            <h5 className="mb-0">Today's Tasks</h5>
-                            <small>Focus on these today</small>
-                        </Card.Header>
-                        <Card.Body style={{ minHeight: '400px', overflowY: 'auto' }}>
-                            {todayTasks.length === 0 ? (
-                                <p className="text-muted text-center mt-4">
-                                    Drag tasks here to work on them today
-                                </p>
-                            ) : (
-                                todayTasks.map(task => (
-                                    <Card key={task.id} className="mb-3 shadow-sm">
+            <Container fluid className="py-4 main-content">
+                <h1 className="text-center mb-4 app-title">Pomodoro Task Manager</h1>
+                <Row className="mb-4">
+                    <Col md={12}>
+                        <Card className="timer-card">
+                            <Card.Body>
+                                <h4 className="timer-title">🍅 Pomodoro Timer</h4>
+                                <div className="d-flex align-items-center gap-3 mb-3 flex-wrap">
+                                    <span className="break-label">Break Duration: <strong>{breakDuration} mins</strong></span>
+                                    <input 
+                                        type="range" 
+                                        min="5" 
+                                        max="10" 
+                                        value={breakDuration}
+                                        onChange={(e) => setBreakDuration(e.target.value)}
+                                        className="custom-range"
+                                    />
+                                </div>
+                                <Button 
+                                    className={`timer-btn ${isTimerActive ? 'active' : ''}`}
+                                    onClick={() => setIsTimerActive(!isTimerActive)}
+                                >
+                                    {isTimerActive ? "⏸ Stop Timer" : "▶ Start Timer"}
+                                </Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+
+                <Row className="task-columns">
+                    <Col lg={4} md={6} className="mb-4">
+                        <Card className="task-column backlog-column">
+                            <Card.Header>
+                                <h5 className="mb-0">📋 Backlog</h5>
+                                <small>All Tasks</small>
+                            </Card.Header>
+                            <Card.Body>
+                                {backlogTasks.map(task => (
+                                    <Card key={task.id} className={`task-card ${task.priority.toLowerCase()}-priority`}>
                                         <Card.Body>
-                                            <Card.Title>{task.title}</Card.Title>
-                                            <div className="mb-2">
-                                                <span className="badge bg-secondary me-2">{task.class}</span>
-                                                <span className={`badge ${task.priority === 'High' ? 'bg-danger' : 'bg-warning'}`}>
+                                            <Card.Title className="task-title">{task.title}</Card.Title>
+                                            <div className="mb-2 task-badges">
+                                                <span className="task-badge class-badge">{task.class}</span>
+                                                <span className="task-badge priority-badge">
                                                     {task.priority}
                                                 </span>
                                             </div>
-                                            <p className="mb-2">🍅 {task.pomodoroCount} cycles</p>
+                                            <p className="pomodoro-count">🍅 {task.pomodoroCount} cycles × 25 mins</p>
+                                            <Button size="sm" className="move-btn">
+                                                Move to Today →
+                                            </Button>
                                         </Card.Body>
                                     </Card>
-                                ))
-                            )}
-                        </Card.Body>
-                    </Card>
-                </Col>
+                                ))}
+                            </Card.Body>
+                        </Card>
+                    </Col>
 
-                {/* Future Tasks Column */}
-                <Col md={4}>
-                    <Card className="h-100">
-                        <Card.Header className="bg-info text-white">
-                            <h5 className="mb-0">Future Tasks</h5>
-                            <small>Upcoming work</small>
-                        </Card.Header>
-                        <Card.Body style={{ minHeight: '400px', overflowY: 'auto' }}>
-                            {futureTasks.length === 0 ? (
-                                <p className="text-muted text-center mt-4">
-                                    Plan ahead by adding future tasks here
-                                </p>
-                            ) : (
-                                futureTasks.map(task => (
-                                    <Card key={task.id} className="mb-3 shadow-sm">
-                                        <Card.Body>
-                                            <Card.Title>{task.title}</Card.Title>
-                                            <div className="mb-2">
-                                                <span className="badge bg-secondary me-2">{task.class}</span>
-                                                <span className={`badge ${task.priority === 'High' ? 'bg-danger' : 'bg-warning'}`}>
-                                                    {task.priority}
-                                                </span>
-                                            </div>
-                                            <p className="mb-2">🍅 {task.pomodoroCount} cycles</p>
-                                        </Card.Body>
-                                    </Card>
-                                ))
-                            )}
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+                    <Col lg={4} md={6} className="mb-4">
+                        <Card className="task-column today-column">
+                            <Card.Header>
+                                <h5 className="mb-0">⭐ Today's Tasks</h5>
+                                <small>Focus on these today</small>
+                            </Card.Header>
+                            <Card.Body>
+                                {todayTasks.length === 0 ? (
+                                    <div className="empty-state">
+                                        <p className="empty-text">
+                                            Drag tasks here to work on them today
+                                        </p>
+                                        <div className="empty-icon">📌</div>
+                                    </div>
+                                ) : (
+                                    todayTasks.map(task => (
+                                        <Card key={task.id} className={`task-card ${task.priority.toLowerCase()}-priority`}>
+                                            <Card.Body>
+                                                <Card.Title className="task-title">{task.title}</Card.Title>
+                                                <div className="mb-2 task-badges">
+                                                    <span className="task-badge class-badge">{task.class}</span>
+                                                    <span className="task-badge priority-badge">
+                                                        {task.priority}
+                                                    </span>
+                                                </div>
+                                                <p className="pomodoro-count">🍅 {task.pomodoroCount} cycles</p>
+                                            </Card.Body>
+                                        </Card>
+                                    ))
+                                )}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    
+                    <Col lg={4} md={6} className="mb-4">
+                        <Card className="task-column future-column">
+                            <Card.Header>
+                                <h5 className="mb-0">🚀 Future Tasks</h5>
+                                <small>Upcoming work</small>
+                            </Card.Header>
+                            <Card.Body>
+                                {futureTasks.length === 0 ? (
+                                    <div className="empty-state">
+                                        <p className="empty-text">
+                                            Plan ahead by adding future tasks here
+                                        </p>
+                                        <div className="empty-icon">🗓️</div>
+                                    </div>
+                                ) : (
+                                    futureTasks.map(task => (
+                                        <Card key={task.id} className={`task-card ${task.priority.toLowerCase()}-priority`}>
+                                            <Card.Body>
+                                                <Card.Title className="task-title">{task.title}</Card.Title>
+                                                <div className="mb-2 task-badges">
+                                                    <span className="task-badge class-badge">{task.class}</span>
+                                                    <span className="task-badge priority-badge">
+                                                        {task.priority}
+                                                    </span>
+                                                </div>
+                                                <p className="pomodoro-count">🍅 {task.pomodoroCount} cycles</p>
+                                            </Card.Body>
+                                        </Card>
+                                    ))
+                                )}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 }

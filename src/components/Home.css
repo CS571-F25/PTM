@@ -1,0 +1,312 @@
+/* Main App Container */
+.app-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0b4f7a 0%, #1a5f8f 100%);
+    position: relative;
+}
+
+/* Hamburger Menu Button */
+.hamburger-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.hamburger-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.hamburger-icon {
+    font-size: 24px;
+    color: #0b4f7a;
+    font-weight: bold;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+    background: linear-gradient(180deg, #0b4f7a 0%, #1a5f8f 100%);
+}
+
+.sidebar-menu .offcanvas-header {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-menu .offcanvas-title {
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar-menu .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.sidebar-menu .nav-link {
+    color: white !important;
+    padding: 15px 20px;
+    margin: 8px 0;
+    border-radius: 10px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu .nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+/* Main Content */
+.main-content {
+    padding-top: 80px !important;
+}
+
+/* App Title */
+.app-title {
+    color: white;
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem !important;
+}
+
+/* Timer Card */
+.timer-card {
+    background: linear-gradient(135deg, #87ceeb 0%, #5fb3d9 100%);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+
+.timer-title {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.break-label {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.custom-range {
+    width: 250px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    outline: none;
+}
+
+.custom-range::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.timer-btn {
+    background: white !important;
+    color: #0b4f7a !important;
+    border: none !important;
+    padding: 12px 30px !important;
+    border-radius: 25px !important;
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.timer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.timer-btn.active {
+    background: #ff6b9d !important;
+    color: white !important;
+}
+
+/* Task Columns */
+.task-columns {
+    margin-top: 2rem;
+}
+
+.task-column {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    height: 600px;
+    overflow: hidden;
+}
+
+.task-column .card-header {
+    border: none;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    color: white;
+}
+
+.backlog-column .card-header {
+    background: linear-gradient(135deg, #87ceeb 0%, #5fb3d9 100%);
+}
+
+.today-column .card-header {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff5588 100%);
+}
+
+.future-column .card-header {
+    background: linear-gradient(135deg, #ffb3d9 0%, #ff99cc 100%);
+}
+
+.task-column .card-body {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 510px;
+}
+
+/* Task Cards */
+.task-card {
+    border: none;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.task-card.high-priority {
+    border-left: 5px solid #ff6b9d;
+}
+
+.task-card.medium-priority {
+    border-left: 5px solid #ffb347;
+}
+
+.task-card.low-priority {
+    border-left: 5px solid #87ceeb;
+}
+
+.task-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.8rem;
+}
+
+.task-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.task-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.class-badge {
+    background: linear-gradient(135deg, #87ceeb 0%, #5fb3d9 100%);
+    color: white;
+}
+
+.priority-badge {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff5588 100%);
+    color: white;
+}
+
+.pomodoro-count {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+}
+
+.move-btn {
+    background: linear-gradient(135deg, #87ceeb 0%, #5fb3d9 100%) !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.move-btn:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-text {
+    color: #888;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    opacity: 0.3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-title {
+        font-size: 1.8rem;
+    }
+
+    .task-column {
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .task-column .card-body {
+        max-height: 400px;
+    }
+
+    .custom-range {
+        width: 100%;
+    }
+}
+
+/* Scrollbar Styling */
+.task-column .card-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-column .card-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.task-column .card-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.task-column .card-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
