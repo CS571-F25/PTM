@@ -360,3 +360,249 @@
 .task-column .card-body::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.3);
 }
+
+/* About Me Page Styles */
+.about-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.about-section-title {
+    color: #0b4f7a;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.about-text {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.pomodoro-steps {
+    margin-top: 1.5rem;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding: 15px;
+    background: rgba(135, 206, 235, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.step-item:hover {
+    background: rgba(135, 206, 235, 0.2);
+    transform: translateX(5px);
+}
+
+.step-number {
+    background: linear-gradient(135deg, #87ceeb 0%, #5fb3d9 100%);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.step-content h5 {
+    color: #0b4f7a;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.step-content p {
+    color: #555;
+    margin-bottom: 0;
+}
+
+.benefit-item {
+    margin-bottom: 1.5rem;
+    padding: 15px;
+    background: rgba(255, 182, 193, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+    background: rgba(255, 182, 193, 0.2);
+    transform: scale(1.02);
+}
+
+.benefit-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.benefit-item h5 {
+    color: #ff6b9d;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.benefit-item p {
+    color: #555;
+    margin-bottom: 0;
+}
+
+.app-features {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    line-height: 2;
+    margin-left: 20px;
+}
+
+.app-features li {
+    margin-bottom: 0.5rem;
+}
+
+/* Settings Page Styles */
+.settings-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.settings-section-title {
+    color: #0b4f7a;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.settings-description {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.background-option {
+    cursor: pointer;
+    text-align: center;
+    padding: 15px;
+    border-radius: 15px;
+    background: white;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    position: relative;
+}
+
+.background-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.background-option.selected {
+    border-color: #87ceeb;
+}
+
+.background-preview {
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.background-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0;
+}
+
+.selected-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #87ceeb;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.setting-item h5 {
+    color: #0b4f7a;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.setting-item p.text-muted {
+    font-size: 0.95rem;
+}
+
+.custom-switch {
+    transform: scale(1.5);
+}
+
+.sound-select,
+.timer-input {
+    border: 2px solid rgba(11, 79, 122, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.sound-select:focus,
+.timer-input:focus {
+    border-color: #87ceeb;
+    box-shadow: 0 0 0 0.2rem rgba(135, 206, 235, 0.25);
+}
+
+.volume-slider {
+    width: 100%;
+    height: 8px;
+    background: rgba(135, 206, 235, 0.3);
+    border-radius: 10px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    background: #87ceeb;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.volume-value {
+    font-weight: bold;
+    color: #0b4f7a;
+    min-width: 50px;
+    text-align: center;
+}
+
+.save-settings-btn {
+    background: linear-gradient(135deg, #87ceeb 0%, #5fb3d9 100%) !important;
+    border: none !important;
+    color: white !important;
+    padding: 15px 50px !important;
+    border-radius: 25px !important;
+    font-weight: bold !important;
+    font-size: 1.2rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.save-settings-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
