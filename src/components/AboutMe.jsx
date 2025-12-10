@@ -24,7 +24,7 @@ export default function AboutMe() {
                 <Offcanvas.Body>
                     <Nav className="flex-column">
                         <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>🏠 Home</Nav.Link>
-                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>👤 About Me</Nav.Link>
+                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>👤 About</Nav.Link>
                         <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>⚙️ Settings</Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
@@ -133,17 +133,17 @@ export default function AboutMe() {
                             {/* About This App */}
                             <Card className="about-card mb-4">
                                 <Card.Body>
-                                    <h2 className="about-section-title">📱 About This App</h2>
+                                    <h2 className="about-section-title">📱 About This Website</h2>
                                     <p className="about-text">
                                         This Pomodoro Task Manager is designed specifically for college students to help you:
                                     </p>
-                                    <ul className="app-features">
+                                    <ol className="app-features">
                                         <li>Organize tasks by class and priority</li>
                                         <li>Plan your daily workload effectively</li>
                                         <li>Track pomodoro cycles for each task</li>
                                         <li>Stay focused with a distraction-free timer</li>
                                         <li>Build better study habits over time</li>
-                                    </ul>
+                                    </ol>
                                     <p className="about-text">
                                         Start your journey to more productive study sessions today! 🎓
                                     </p>

@@ -53,7 +53,7 @@ export default function Settings() {
                 <Offcanvas.Body>
                     <Nav className="flex-column">
                         <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>🏠 Home</Nav.Link>
-                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>👤 About Me</Nav.Link>
+                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>👤 About</Nav.Link>
                         <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>⚙️ Settings</Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
