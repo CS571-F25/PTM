@@ -1,14 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Offcanvas, Nav, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
 import './Home.css';
 
 export default function Settings() {
     const [showMenu, setShowMenu] = useState(false);
-    const [selectedBackground, setSelectedBackground] = useState('default');
-    const [timerSound, setTimerSound] = useState('bell');
-    const [soundVolume, setSoundVolume] = useState(50);
-    const [soundEnabled, setSoundEnabled] = useState(true);
+    
+    //load settings from localStorage
+    const [selectedBackground, setSelectedBackground] = useState(() => {
+        return localStorage.getItem('selectedBackground') || 'default';
+    });
+    
+    const [timerSound, setTimerSound] = useState(() => {
+        return localStorage.getItem('timerSound') || 'bell';
+    });
+    
+    const [soundVolume, setSoundVolume] = useState(() => {
+        return parseInt(localStorage.getItem('soundVolume')) || 50;
+    });
+    
+    const [soundEnabled, setSoundEnabled] = useState(() => {
+        const saved = localStorage.getItem('soundEnabled');
+        return saved !== null ? saved === 'true' : true;
+    });
+    
+    const [workDuration, setWorkDuration] = useState(() => {
+        return parseInt(localStorage.getItem('workDuration')) || 25;
+    });
+    
+    const [breakDuration, setBreakDuration] = useState(() => {
+        return parseInt(localStorage.getItem('breakDuration')) || 5;
+    });
 
     const handleShowMenu = () => setShowMenu(true);
     const handleCloseMenu = () => setShowMenu(false);
@@ -23,12 +45,24 @@ export default function Settings() {
     ];
 
     const sounds = [
-        { id: 'bell', name: 'Bell Chime' },
-        { id: 'digital', name: 'Digital Beep' },
-        { id: 'soft', name: 'Soft Notification' },
-        { id: 'chime', name: 'Wind Chime' },
-        { id: 'none', name: 'No Sound' }
+        { id: 'bell', name: 'Bell Chime', file: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
+        },
+        { id: 'digital', name: 'Digital Beep', file: 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3'
+        },
+        { id: 'soft', name: 'Soft Notification', file: 'https://assets.mixkit.co/active_storage/sfx/2870/2870-preview.mp3'
+        },
+        { id: 'chime', name: 'Wind Chime', file: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'
+        },
+        { id: 'none', name: 'No Sound', file: null }
     ];
+
+    //apply background on mount
+    useEffect(() => {
+        const background = backgrounds.find(bg => bg.id === selectedBackground);
+        if (background) {
+            document.querySelector('.app-container').style.background = background.gradient;
+        }
+    }, []);
 
     const handleBackgroundChange = (bgId) => {
         setSelectedBackground(bgId);
@@ -36,6 +70,29 @@ export default function Settings() {
         if (background) {
             document.querySelector('.app-container').style.background = background.gradient;
         }
+    };
+
+    const handleTestSound = () => {
+        if (!soundEnabled || timerSound === 'none') return;
+        
+        const sound = sounds.find(s => s.id === timerSound);
+        if (sound && sound.file) {
+            const audio = new Audio(sound.file);
+            audio.volume = soundVolume / 100;
+            audio.play().catch(err => console.log('Audio play failed:', err));
+        }
+    };
+
+    const handleSaveSettings = () => {
+        //save all settings to localStorage
+        localStorage.setItem('selectedBackground', selectedBackground);
+        localStorage.setItem('timerSound', timerSound);
+        localStorage.setItem('soundVolume', soundVolume);
+        localStorage.setItem('soundEnabled', soundEnabled);
+        localStorage.setItem('workDuration', workDuration);
+        localStorage.setItem('breakDuration', breakDuration);
+        
+        alert('Settings saved successfully!');
     };
 
     return (
@@ -137,6 +194,7 @@ export default function Settings() {
                                                     variant="outline-primary" 
                                                     size="sm" 
                                                     className="mt-2"
+                                                    onClick={handleTestSound}
                                                 >
                                                     🔊 Test Sound
                                                 </Button>
@@ -147,13 +205,13 @@ export default function Settings() {
                                                 <h5>Volume</h5>
                                                 <p className="text-muted">Adjust notification volume</p>
                                                 <div className="d-flex align-items-center gap-3">
-                                                    <span>🔈</span>
+                                                    <span>📈</span>
                                                     <input 
                                                         type="range" 
                                                         min="0" 
                                                         max="100" 
                                                         value={soundVolume}
-                                                        onChange={(e) => setSoundVolume(e.target.value)}
+                                                        onChange={(e) => setSoundVolume(parseInt(e.target.value))}
                                                         className="volume-slider"
                                                     />
                                                     <span>🔊</span>
@@ -176,31 +234,22 @@ export default function Settings() {
                                         <input 
                                             type="number" 
                                             className="form-control timer-input"
-                                            defaultValue={25}
+                                            value={workDuration}
+                                            onChange={(e) => setWorkDuration(parseInt(e.target.value))}
                                             min="1"
                                             max="60"
                                         />
                                     </div>
 
                                     <div className="setting-item mb-3">
-                                        <label className="form-label">Short Break Duration (minutes)</label>
+                                        <label className="form-label">Break Duration (minutes)</label>
                                         <input 
                                             type="number" 
                                             className="form-control timer-input"
-                                            defaultValue={5}
+                                            value={breakDuration}
+                                            onChange={(e) => setBreakDuration(parseInt(e.target.value))}
                                             min="1"
                                             max="30"
-                                        />
-                                    </div>
-
-                                    <div className="setting-item">
-                                        <label className="form-label">Long Break Duration (minutes)</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control timer-input"
-                                            defaultValue={15}
-                                            min="1"
-                                            max="60"
                                         />
                                     </div>
                                 </Card.Body>
@@ -208,7 +257,7 @@ export default function Settings() {
 
                             {/* Save Button */}
                             <div className="text-center mb-4">
-                                <Button className="save-settings-btn">
+                                <Button className="save-settings-btn" onClick={handleSaveSettings}>
                                     💾 Save All Settings
                                 </Button>
                             </div>

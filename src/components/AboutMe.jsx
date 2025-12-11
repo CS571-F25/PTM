@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Offcanvas, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router';
 import './Home.css';
@@ -8,6 +8,24 @@ export default function AboutMe() {
 
     const handleShowMenu = () => setShowMenu(true);
     const handleCloseMenu = () => setShowMenu(false);
+
+    const backgrounds = [
+        { id: 'default', gradient: 'linear-gradient(135deg, #0b4f7a 0%, #1a5f8f 100%)' },
+        { id: 'sunset', gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%)' },
+        { id: 'forest', gradient: 'linear-gradient(135deg, #134e4a 0%, #14532d 100%)' },
+        { id: 'purple', gradient: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)' },
+        { id: 'midnight', gradient: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' },
+        { id: 'cherry', gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)' }
+    ];
+
+    //apply saved background on mount
+    useEffect(() => {
+        const selectedBackground = localStorage.getItem('selectedBackground') || 'default';
+        const background = backgrounds.find(bg => bg.id === selectedBackground);
+        if (background) {
+            document.querySelector('.app-container').style.background = background.gradient;
+        }
+    }, []);
 
     return (
         <div className="app-container">
@@ -145,7 +163,7 @@ export default function AboutMe() {
                                         <li>Build better study habits over time</li>
                                     </ol>
                                     <p className="about-text">
-                                        Start your journey to more productive study sessions today! 🎓
+                                        Start your journey to more productive study sessions today!
                                     </p>
                                 </Card.Body>
                             </Card>
