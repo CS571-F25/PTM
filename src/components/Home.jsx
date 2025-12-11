@@ -7,10 +7,7 @@ export default function Home() {
     //load tasks from localStorage or use defaults
     const [backlogTasks, setBacklogTasks] = useState(() => {
         const saved = localStorage.getItem('backlogTasks');
-        return saved ? JSON.parse(saved) : [
-            { id: 1, title: 'Complete CS 571 Homework', class: 'CS 571', priority: 'High', pomodoroCount: 3 },
-            { id: 2, title: 'Read Chapter 5', class: 'History', priority: 'Medium', pomodoroCount: 2 }
-        ];
+        return saved ? JSON.parse(saved) : [];
     });
     
     const [todayTasks, setTodayTasks] = useState(() => {
