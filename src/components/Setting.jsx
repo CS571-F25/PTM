@@ -5,29 +5,28 @@ import './Home.css';
 
 export default function Settings() {
     const [showMenu, setShowMenu] = useState(false);
-    
-    //load settings from localStorage
+
     const [selectedBackground, setSelectedBackground] = useState(() => {
         return localStorage.getItem('selectedBackground') || 'default';
     });
-    
+
     const [timerSound, setTimerSound] = useState(() => {
         return localStorage.getItem('timerSound') || 'bell';
     });
-    
+
     const [soundVolume, setSoundVolume] = useState(() => {
         return parseInt(localStorage.getItem('soundVolume')) || 50;
     });
-    
+
     const [soundEnabled, setSoundEnabled] = useState(() => {
         const saved = localStorage.getItem('soundEnabled');
         return saved !== null ? saved === 'true' : true;
     });
-    
+
     const [workDuration, setWorkDuration] = useState(() => {
         return parseInt(localStorage.getItem('workDuration')) || 25;
     });
-    
+
     const [breakDuration, setBreakDuration] = useState(() => {
         return parseInt(localStorage.getItem('breakDuration')) || 5;
     });
@@ -45,23 +44,38 @@ export default function Settings() {
     ];
 
     const sounds = [
-        { id: 'bell', name: 'Bell Chime', file: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
-        },
-        { id: 'digital', name: 'Digital Beep', file: 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3'
-        },
-        { id: 'soft', name: 'Soft Notification', file: 'https://assets.mixkit.co/active_storage/sfx/2870/2870-preview.mp3'
-        },
-        { id: 'chime', name: 'Wind Chime', file: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'
-        },
+        { id: 'bell', name: 'Bell Chime', file: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' },
+        { id: 'digital', name: 'Digital Beep', file: 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3' },
+        { id: 'soft', name: 'Soft Notification', file: 'https://assets.mixkit.co/active_storage/sfx/2870/2870-preview.mp3' },
+        { id: 'chime', name: 'Wind Chime', file: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3' },
         { id: 'none', name: 'No Sound', file: null }
     ];
 
-    //apply background on mount
     useEffect(() => {
         const background = backgrounds.find(bg => bg.id === selectedBackground);
         if (background) {
             document.querySelector('.app-container').style.background = background.gradient;
         }
+    }, []);
+
+    // Scroll-reveal: replays every time elements scroll into / out of view
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            },
+            { threshold: 0.12 }
+        );
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        return () => observer.disconnect();
     }, []);
 
     const handleBackgroundChange = (bgId) => {
@@ -74,7 +88,7 @@ export default function Settings() {
 
     const handleTestSound = () => {
         if (!soundEnabled || timerSound === 'none') return;
-        
+
         const sound = sounds.find(s => s.id === timerSound);
         if (sound && sound.file) {
             const audio = new Audio(sound.file);
@@ -84,34 +98,31 @@ export default function Settings() {
     };
 
     const handleSaveSettings = () => {
-        //save all settings to localStorage
         localStorage.setItem('selectedBackground', selectedBackground);
         localStorage.setItem('timerSound', timerSound);
         localStorage.setItem('soundVolume', soundVolume);
         localStorage.setItem('soundEnabled', soundEnabled);
         localStorage.setItem('workDuration', workDuration);
         localStorage.setItem('breakDuration', breakDuration);
-        
+
         alert('Settings saved successfully!');
     };
 
     return (
         <div className="app-container">
-            {/* Hamburger Menu Button */}
             <Button variant="light" className="hamburger-btn" onClick={handleShowMenu}>
-                <span className="hamburger-icon">☰</span>
+                <span className="hamburger-icon">&#9776;</span>
             </Button>
 
-            {/* Offcanvas Sidebar Menu */}
             <Offcanvas show={showMenu} onHide={handleCloseMenu} className="sidebar-menu">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Menu</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Nav className="flex-column">
-                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>🏠 Home</Nav.Link>
-                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>👤 About</Nav.Link>
-                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>⚙️ Settings</Nav.Link>
+                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>Home</Nav.Link>
+                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>About</Nav.Link>
+                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>Settings</Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
             </Offcanvas>
@@ -122,26 +133,26 @@ export default function Settings() {
 
                     <Row className="justify-content-center">
                         <Col lg={10}>
-                            {/* Background Theme Settings */}
-                            <Card className="settings-card mb-4">
+                            {/* Background Theme */}
+                            <Card className="settings-card mb-4 reveal">
                                 <Card.Body>
-                                    <h2 className="settings-section-title">🎨 Background Theme</h2>
+                                    <h2 className="settings-section-title">Background Theme</h2>
                                     <p className="settings-description">Choose a background theme that matches your mood</p>
-                                    
+
                                     <Row className="mt-4">
                                         {backgrounds.map(bg => (
                                             <Col md={4} sm={6} key={bg.id} className="mb-3">
-                                                <div 
+                                                <div
                                                     className={`background-option ${selectedBackground === bg.id ? 'selected' : ''}`}
                                                     onClick={() => handleBackgroundChange(bg.id)}
                                                 >
-                                                    <div 
+                                                    <div
                                                         className="background-preview"
                                                         style={{ background: bg.gradient }}
                                                     ></div>
                                                     <p className="background-name">{bg.name}</p>
                                                     {selectedBackground === bg.id && (
-                                                        <span className="selected-badge">✓ Selected</span>
+                                                        <span className="selected-badge">&#10003; Selected</span>
                                                     )}
                                                 </div>
                                             </Col>
@@ -151,19 +162,18 @@ export default function Settings() {
                             </Card>
 
                             {/* Audio Settings */}
-                            <Card className="settings-card mb-4">
+                            <Card className="settings-card mb-4 reveal reveal-delay-1">
                                 <Card.Body>
-                                    <h2 className="settings-section-title">🔊 Audio Settings</h2>
+                                    <h2 className="settings-section-title">Audio Settings</h2>
                                     <p className="settings-description">Customize timer sounds and notifications</p>
 
-                                    {/* Sound On/Off Toggle */}
                                     <div className="setting-item mb-4">
                                         <div className="d-flex justify-content-between align-items-center">
                                             <div>
                                                 <h5>Enable Sounds</h5>
                                                 <p className="text-muted mb-0">Play sound when timer completes</p>
                                             </div>
-                                            <Form.Check 
+                                            <Form.Check
                                                 type="switch"
                                                 id="sound-toggle"
                                                 checked={soundEnabled}
@@ -173,13 +183,12 @@ export default function Settings() {
                                         </div>
                                     </div>
 
-                                    {/* Timer Sound Selection */}
                                     {soundEnabled && (
                                         <>
                                             <div className="setting-item mb-4">
                                                 <h5>Timer Sound</h5>
                                                 <p className="text-muted">Choose the sound for timer completion</p>
-                                                <Form.Select 
+                                                <Form.Select
                                                     value={timerSound}
                                                     onChange={(e) => setTimerSound(e.target.value)}
                                                     className="sound-select"
@@ -190,31 +199,28 @@ export default function Settings() {
                                                         </option>
                                                     ))}
                                                 </Form.Select>
-                                                <Button 
-                                                    variant="outline-primary" 
-                                                    size="sm" 
+                                                <Button
+                                                    variant="outline-primary"
+                                                    size="sm"
                                                     className="mt-2"
                                                     onClick={handleTestSound}
                                                 >
-                                                    🔊 Test Sound
+                                                    Test Sound
                                                 </Button>
                                             </div>
 
-                                            {/* Volume Control */}
                                             <div className="setting-item">
                                                 <h5>Volume</h5>
                                                 <p className="text-muted">Adjust notification volume</p>
                                                 <div className="d-flex align-items-center gap-3">
-                                                    <span>📈</span>
-                                                    <input 
-                                                        type="range" 
-                                                        min="0" 
-                                                        max="100" 
+                                                    <input
+                                                        type="range"
+                                                        min="0"
+                                                        max="100"
                                                         value={soundVolume}
                                                         onChange={(e) => setSoundVolume(parseInt(e.target.value))}
                                                         className="volume-slider"
                                                     />
-                                                    <span>🔊</span>
                                                     <span className="volume-value">{soundVolume}%</span>
                                                 </div>
                                             </div>
@@ -224,15 +230,15 @@ export default function Settings() {
                             </Card>
 
                             {/* Timer Settings */}
-                            <Card className="settings-card mb-4">
+                            <Card className="settings-card mb-4 reveal reveal-delay-2">
                                 <Card.Body>
-                                    <h2 className="settings-section-title">⏱️ Timer Preferences</h2>
+                                    <h2 className="settings-section-title">Timer Preferences</h2>
                                     <p className="settings-description">Customize your pomodoro session durations</p>
 
                                     <div className="setting-item mb-3">
                                         <label className="form-label">Work Session Duration (minutes)</label>
-                                        <input 
-                                            type="number" 
+                                        <input
+                                            type="number"
                                             className="form-control timer-input"
                                             value={workDuration}
                                             onChange={(e) => setWorkDuration(parseInt(e.target.value))}
@@ -243,8 +249,8 @@ export default function Settings() {
 
                                     <div className="setting-item mb-3">
                                         <label className="form-label">Break Duration (minutes)</label>
-                                        <input 
-                                            type="number" 
+                                        <input
+                                            type="number"
                                             className="form-control timer-input"
                                             value={breakDuration}
                                             onChange={(e) => setBreakDuration(parseInt(e.target.value))}
@@ -255,10 +261,9 @@ export default function Settings() {
                                 </Card.Body>
                             </Card>
 
-                            {/* Save Button */}
-                            <div className="text-center mb-4">
+                            <div className="text-center mb-4 reveal reveal-delay-3">
                                 <Button className="save-settings-btn" onClick={handleSaveSettings}>
-                                    💾 Save All Settings
+                                    Save All Settings
                                 </Button>
                             </div>
                         </Col>

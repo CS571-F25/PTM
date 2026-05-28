@@ -9,35 +9,35 @@ export default function Home() {
         const saved = localStorage.getItem('backlogTasks');
         return saved ? JSON.parse(saved) : [];
     });
-    
+
     const [todayTasks, setTodayTasks] = useState(() => {
         const saved = localStorage.getItem('todayTasks');
         return saved ? JSON.parse(saved) : [];
     });
-    
+
     const [futureTasks, setFutureTasks] = useState(() => {
         const saved = localStorage.getItem('futureTasks');
         return saved ? JSON.parse(saved) : [];
     });
-    
+
     //load timer settings from localStorage
     const [breakDuration] = useState(() => {
         return parseInt(localStorage.getItem('breakDuration')) || 5;
     });
-    
+
     const [workDuration] = useState(() => {
         return parseInt(localStorage.getItem('workDuration')) || 25;
     });
-    
+
     //timer state
     const [isTimerActive, setIsTimerActive] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(workDuration * 60); // in seconds
+    const [timeLeft, setTimeLeft] = useState(workDuration * 60);
     const [isBreak, setIsBreak] = useState(false);
     const [cyclesCompleted, setCyclesCompleted] = useState(() => {
         return parseInt(localStorage.getItem('cyclesCompleted')) || 0;
     });
     const [showMenu, setShowMenu] = useState(false);
-    
+
     //form state
     const [taskTitle, setTaskTitle] = useState('');
     const [taskClass, setTaskClass] = useState('');
@@ -60,12 +60,10 @@ export default function Home() {
         chime: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'
     };
 
-    //save cycles to localStorage
     useEffect(() => {
         localStorage.setItem('cyclesCompleted', cyclesCompleted.toString());
     }, [cyclesCompleted]);
 
-    //apply saved background on mount
     useEffect(() => {
         const selectedBackground = localStorage.getItem('selectedBackground') || 'default';
         const background = backgrounds.find(bg => bg.id === selectedBackground);
@@ -74,10 +72,9 @@ export default function Home() {
         }
     }, []);
 
-    //timer countdown effect
     useEffect(() => {
         let interval = null;
-        
+
         if (isTimerActive && timeLeft > 0) {
             interval = setInterval(() => {
                 setTimeLeft(prevTime => prevTime - 1);
@@ -107,7 +104,7 @@ export default function Home() {
                 }, 100);
             }
         }
-        
+
         return () => {
             if (interval) clearInterval(interval);
         };
@@ -116,10 +113,10 @@ export default function Home() {
     const playNotificationSound = () => {
         const soundEnabled = localStorage.getItem('soundEnabled') === 'true';
         if (!soundEnabled) return;
-        
+
         const timerSound = localStorage.getItem('timerSound') || 'bell';
         const soundVolume = parseInt(localStorage.getItem('soundVolume')) || 50;
-        
+
         if (timerSound !== 'none' && sounds[timerSound]) {
             const audio = new Audio(sounds[timerSound]);
             audio.volume = soundVolume / 100;
@@ -129,10 +126,8 @@ export default function Home() {
 
     const handleStartStopTimer = () => {
         if (isTimerActive) {
-            //pause timer
             setIsTimerActive(false);
         } else {
-            //start / resume
             setIsTimerActive(true);
             if (timeLeft === 0) {
                 setTimeLeft(workDuration * 60);
@@ -154,7 +149,6 @@ export default function Home() {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    //save tasks to localStorage whenever they change
     useEffect(() => {
         localStorage.setItem('backlogTasks', JSON.stringify(backlogTasks));
     }, [backlogTasks]);
@@ -170,10 +164,9 @@ export default function Home() {
     const handleCloseMenu = () => setShowMenu(false);
     const handleShowMenu = () => setShowMenu(true);
 
-    //add new task to backlog
     const handleAddTask = (e) => {
         e.preventDefault();
-        
+
         if (!taskTitle || !taskClass || !taskPriority || !taskPomodoros) {
             alert('Please fill in all fields');
             return;
@@ -194,28 +187,24 @@ export default function Home() {
         setTaskPomodoros('');
     };
 
-    //move task to Backlog
     const moveToBacklog = (task) => {
         setTodayTasks(todayTasks.filter(t => t.id !== task.id));
         setFutureTasks(futureTasks.filter(t => t.id !== task.id));
         setBacklogTasks([...backlogTasks, task]);
     };
 
-    //move task to Today
     const moveToToday = (task) => {
         setBacklogTasks(backlogTasks.filter(t => t.id !== task.id));
         setFutureTasks(futureTasks.filter(t => t.id !== task.id));
         setTodayTasks([...todayTasks, task]);
     };
 
-    //move task to Future
     const moveToFuture = (task) => {
         setBacklogTasks(backlogTasks.filter(t => t.id !== task.id));
         setTodayTasks(todayTasks.filter(t => t.id !== task.id));
         setFutureTasks([...futureTasks, task]);
     };
 
-    //remove task
     const removeTask = (taskId, column) => {
         if (column === 'backlog') {
             setBacklogTasks(backlogTasks.filter(t => t.id !== taskId));
@@ -226,7 +215,6 @@ export default function Home() {
         }
     };
 
-    //sort tasks by priority
     const sortByPriority = (tasks) => {
         const priorityOrder = { 'High': 1, 'Medium': 2, 'Low': 3 };
         return [...tasks].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
@@ -235,7 +223,7 @@ export default function Home() {
     const TaskCard = ({ task, column }) => (
         <Card className="task-card">
             <Card.Body>
-                <button 
+                <button
                     className="remove-task-btn"
                     onClick={() => removeTask(task.id, column)}
                     aria-label="Remove task"
@@ -249,7 +237,7 @@ export default function Home() {
                         {task.priority}
                     </span>
                 </div>
-                <p className="pomodoro-count">🍅 {task.pomodoroCount} cycles × {workDuration} mins</p>
+                <p className="pomodoro-count">{task.pomodoroCount} cycles &times; {workDuration} mins</p>
                 <div className="task-actions">
                     {column === 'backlog' && (
                         <>
@@ -288,21 +276,19 @@ export default function Home() {
 
     return (
         <div className="app-container">
-            {/* Hamburger Menu Button */}
             <Button variant="light" className="hamburger-btn" onClick={handleShowMenu}>
-                <span className="hamburger-icon">☰</span>
+                <span className="hamburger-icon">&#9776;</span>
             </Button>
 
-            {/* Offcanvas Sidebar Menu */}
             <Offcanvas show={showMenu} onHide={handleCloseMenu} className="sidebar-menu">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Menu</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Nav className="flex-column">
-                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>🏠 Home</Nav.Link>
-                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>👤 About</Nav.Link>
-                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>⚙️ Settings</Nav.Link>
+                        <Nav.Link as={Link} to="/" onClick={handleCloseMenu}>Home</Nav.Link>
+                        <Nav.Link as={Link} to="/about" onClick={handleCloseMenu}>About</Nav.Link>
+                        <Nav.Link as={Link} to="/settings" onClick={handleCloseMenu}>Settings</Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
             </Offcanvas>
@@ -310,24 +296,19 @@ export default function Home() {
             <div className="main-content">
                 <Container>
                     <h1 className="text-center mb-5 app-title">Pomodoro Task Manager</h1>
-                    
+
                     <Row className="justify-content-center">
                         <Col xxl={11} xl={12}>
-                            {/* Timer and Add Task Side by Side */}
                             <Row className="mb-4">
                                 {/* Timer Section */}
                                 <Col md={6} className="mb-4 mb-md-0">
                                     <Card className="section-card h-100">
                                         <Card.Body className="text-center">
-                                            <h2 className="section-title">
-                                                <span className="section-icon">🍅</span>
-                                                Pomodoro Timer
-                                            </h2>
+                                            <h2 className="section-title">Pomodoro Timer</h2>
                                             <p className="section-description">
                                                 {isBreak ? 'Break Time!' : 'Track your focus sessions'}
                                             </p>
-                                            
-                                            {/* Timer Display */}
+
                                             <div className="timer-display">
                                                 <div className="timer-info-item">
                                                     <label className="timer-label">{isBreak ? 'Break Time' : 'Work Session'}</label>
@@ -336,29 +317,26 @@ export default function Home() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            {/* Start/Stop Button */}
-                                            <Button 
+
+                                            <Button
                                                 className={`main-action-btn ${isTimerActive ? 'stop-btn' : ''}`}
                                                 onClick={handleStartStopTimer}
                                             >
-                                                {isTimerActive ? "⏸ Stop Timer" : "▶ Start Timer"}
+                                                {isTimerActive ? 'Stop Timer' : 'Start Timer'}
                                             </Button>
-                                            
-                                            {/* Cycle Counter and Reset at Bottom */}
+
                                             <div className="timer-bottom-row">
                                                 <div className="cycle-counter-bottom">
-                                                    <span className="cycle-icon">🔄</span>
                                                     <span className="cycle-text">Cycles: </span>
                                                     <span className="cycle-number">{cyclesCompleted}</span>
                                                 </div>
-                                                
-                                                <Button 
+
+                                                <Button
                                                     className="reset-btn-bottom"
                                                     onClick={handleResetTimer}
                                                     variant="outline-secondary"
                                                 >
-                                                    🔄 Reset
+                                                    Reset
                                                 </Button>
                                             </div>
                                         </Card.Body>
@@ -369,30 +347,27 @@ export default function Home() {
                                 <Col md={6}>
                                     <Card className="section-card h-100">
                                         <Card.Body className="text-center">
-                                            <h2 className="section-title">
-                                                <span className="section-icon">➕</span>
-                                                Add New Task
-                                            </h2>
+                                            <h2 className="section-title">Add New Task</h2>
                                             <p className="section-description">Create a task to add to your backlog</p>
-                                            
+
                                             <form onSubmit={handleAddTask} className="task-form">
                                                 <div className="form-group">
                                                     <label>Task Title</label>
-                                                    <input 
-                                                        type="text" 
+                                                    <input
+                                                        type="text"
                                                         className="form-control custom-input"
                                                         placeholder="Enter task title"
                                                         value={taskTitle}
                                                         onChange={(e) => setTaskTitle(e.target.value)}
                                                     />
                                                 </div>
-                                                
+
                                                 <Row>
                                                     <Col xs={6}>
                                                         <div className="form-group">
                                                             <label>Class</label>
-                                                            <input 
-                                                                type="text" 
+                                                            <input
+                                                                type="text"
                                                                 className="form-control custom-input"
                                                                 placeholder="e.g., CS 571"
                                                                 value={taskClass}
@@ -403,7 +378,7 @@ export default function Home() {
                                                     <Col xs={6}>
                                                         <div className="form-group">
                                                             <label>Priority</label>
-                                                            <select 
+                                                            <select
                                                                 className="form-select custom-input"
                                                                 value={taskPriority}
                                                                 onChange={(e) => setTaskPriority(e.target.value)}
@@ -416,11 +391,11 @@ export default function Home() {
                                                         </div>
                                                     </Col>
                                                 </Row>
-                                                
+
                                                 <div className="form-group">
                                                     <label>Pomodoro Cycles</label>
-                                                    <input 
-                                                        type="number" 
+                                                    <input
+                                                        type="number"
                                                         className="form-control custom-input"
                                                         placeholder="Enter cycles"
                                                         min="1"
@@ -428,7 +403,7 @@ export default function Home() {
                                                         onChange={(e) => setTaskPomodoros(e.target.value)}
                                                     />
                                                 </div>
-                                                
+
                                                 <Button type="submit" className="main-action-btn w-100">
                                                     Add to Backlog
                                                 </Button>
@@ -441,18 +416,14 @@ export default function Home() {
                             {/* Task Management Section */}
                             <Card className="section-card task-management-card mb-4">
                                 <Card.Body className="text-center">
-                                    <h2 className="section-title">
-                                        <span className="section-icon">📋</span>
-                                        Task Management
-                                    </h2>
+                                    <h2 className="section-title">Task Management</h2>
                                     <p className="section-description">Organize your tasks across different categories</p>
-                                    
-                                    {/* Task Columns */}
+
                                     <Row className="task-columns-row mt-4">
                                         {/* Backlog Column */}
                                         <Col lg={4} md={6}>
                                             <div className="task-column-wrapper">
-                                                <h3 className="column-title backlog-title">📋 Backlog</h3>
+                                                <h3 className="column-title backlog-title">Backlog</h3>
                                                 <p className="column-subtitle">All Tasks</p>
                                                 <div className="tasks-list">
                                                     {sortByPriority(backlogTasks).map(task => (
@@ -461,7 +432,6 @@ export default function Home() {
                                                     {backlogTasks.length === 0 && (
                                                         <div className="empty-state">
                                                             <p className="empty-text">No tasks in backlog</p>
-                                                            <div className="empty-icon">📋</div>
                                                         </div>
                                                     )}
                                                 </div>
@@ -471,13 +441,12 @@ export default function Home() {
                                         {/* Today's Tasks Column */}
                                         <Col lg={4} md={6}>
                                             <div className="task-column-wrapper">
-                                                <h3 className="column-title today-title">⭐ Today's Tasks</h3>
+                                                <h3 className="column-title today-title">Today&apos;s Tasks</h3>
                                                 <p className="column-subtitle">Focus on these today</p>
                                                 <div className="tasks-list">
                                                     {todayTasks.length === 0 ? (
                                                         <div className="empty-state">
                                                             <p className="empty-text">Move tasks here to work on them today</p>
-                                                            <div className="empty-icon">📌</div>
                                                         </div>
                                                     ) : (
                                                         sortByPriority(todayTasks).map(task => (
@@ -491,13 +460,12 @@ export default function Home() {
                                         {/* Future Tasks Column */}
                                         <Col lg={4} md={6}>
                                             <div className="task-column-wrapper">
-                                                <h3 className="column-title future-title">🚀 Future Tasks</h3>
+                                                <h3 className="column-title future-title">Future Tasks</h3>
                                                 <p className="column-subtitle">Upcoming work</p>
                                                 <div className="tasks-list">
                                                     {futureTasks.length === 0 ? (
                                                         <div className="empty-state">
                                                             <p className="empty-text">Plan ahead by adding future tasks here</p>
-                                                            <div className="empty-icon">🗓️</div>
                                                         </div>
                                                     ) : (
                                                         sortByPriority(futureTasks).map(task => (
